@@ -11,12 +11,24 @@ export default function ContactForm() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
-    await new Promise(r => setTimeout(r, 1200))
-    setStatus('success')
-    setForm({ firstName: '', lastName: '', email: '', phone: '', interest: '', budget: '', message: '' })
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (res.ok) {
+        setStatus('success')
+        setForm({ firstName: '', lastName: '', email: '', phone: '', interest: '', budget: '', message: '' })
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   const fieldStyle = (name: string): React.CSSProperties => ({
