@@ -7,98 +7,79 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const links = ['Properties', 'About', 'Services', 'Contact']
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-[#0D0D0D]/95 backdrop-blur-sm py-4'
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-       
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 border border-[#C9A84C] rotate-45 flex items-center justify-center">
-            <div className="w-2 h-2 bg-[#C9A84C]"></div>
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-7'}`}
+        style={{
+          background: scrolled ? 'rgba(28,25,23,0.96)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(68,64,60,0.4)' : 'none',
+        }}
+      >
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+            <div style={{ width: 30, height: 30, border: '1.5px solid var(--terracotta)', transform: 'rotate(45deg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 8, height: 8, background: 'var(--terracotta)', transform: 'rotate(-45deg)' }} />
+            </div>
+            <span className="font-display" style={{ fontSize: '1.3rem', letterSpacing: '0.12em', color: 'var(--cream)', fontWeight: 400 }}>
+              GLORIA<span style={{ color: 'var(--terracotta)' }}>BUILDS</span>
+            </span>
+          </Link>
+
+          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 36 }}>
+            {links.map(l => (
+              <Link key={l} href={`#${l.toLowerCase()}`} className="nav-link">{l}</Link>
+            ))}
           </div>
-          <span className="font-display text-xl tracking-widest text-[#F5F0E8]">
-            GLORIA<span className="text-[#C9A84C]">BUILDS</span>
-          </span>
-        </div>
 
-      
-        <div className="hidden md:flex items-center gap-10">
-          {['Properties', 'About', 'Services', 'Contact'].map((item) => (
-            <Link
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="hover-line text-xs tracking-widest text-[#888880] hover:text-[#C9A84C] transition-colors duration-300 uppercase"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
-
-        
-        <Link
-          href="#contact"
-          className="hidden md:block text-xs tracking-widest uppercase border border-[#C9A84C] text-[#C9A84C] px-6 py-2.5 hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-all duration-300"
-        >
-          Enquire Now
-        </Link>
-
-      
-        <button
-        title='c'
-          className="md:hidden flex flex-col gap-1.5"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <span
-            className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300 ${
-              menuOpen ? 'rotate-45 translate-y-2' : ''
-            }`}
-          ></span>
-          <span
-            className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300 ${
-              menuOpen ? 'opacity-0' : ''
-            }`}
-          ></span>
-          <span
-            className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300 ${
-              menuOpen ? '-rotate-45 -translate-y-2' : ''
-            }`}
-          ></span>
-        </button>
-      </div>
-
-     
-      {menuOpen && (
-        <div className="md:hidden bg-[#0D0D0D]/98 px-6 py-8 flex flex-col gap-6">
-          {['Properties', 'About', 'Services', 'Contact'].map((item) => (
-            <Link
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              className="text-sm tracking-widest uppercase text-[#888880] hover:text-[#C9A84C] transition-colors"
-            >
-              {item}
-            </Link>
-          ))}
-
-          <Link
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="text-xs tracking-widest uppercase border border-[#C9A84C] text-[#C9A84C] px-6 py-3 text-center hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-all duration-300"
-          >
+          <Link href="#contact" className="filled-btn hidden md:inline-flex" style={{ padding: '11px 26px', fontSize: '11px' }}>
             Enquire Now
           </Link>
+
+          <button
+            className="md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 5, padding: 4 }}
+            aria-label="Toggle menu"
+          >
+            {[0, 1, 2].map(i => (
+              <span key={i} style={{
+                display: 'block', width: 24, height: 1.5, background: 'var(--terracotta)',
+                transition: 'all 0.3s ease',
+                transform: menuOpen
+                  ? i === 0 ? 'rotate(45deg) translate(4px, 5px)'
+                  : i === 2 ? 'rotate(-45deg) translate(4px, -5px)'
+                  : 'scaleX(0)'
+                  : 'none',
+                opacity: menuOpen && i === 1 ? 0 : 1,
+              }} />
+            ))}
+          </button>
         </div>
-      )}
-    </nav>
+      </nav>
+
+      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <button
+          onClick={() => setMenuOpen(false)}
+          style={{ position: 'absolute', top: 28, right: 28, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--stone-light)', fontSize: 28 }}
+        >✕</button>
+        {links.map(l => (
+          <Link key={l} href={`#${l.toLowerCase()}`} className="mobile-nav-link" onClick={() => setMenuOpen(false)}>
+            {l}
+          </Link>
+        ))}
+        <Link href="#contact" className="filled-btn" onClick={() => setMenuOpen(false)} style={{ marginTop: 16 }}>
+          Enquire Now
+        </Link>
+      </div>
+    </>
   )
 }

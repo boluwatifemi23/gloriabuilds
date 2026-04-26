@@ -1,90 +1,86 @@
+'use client'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 
 export default function Hero() {
+  const parallaxRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (parallaxRef.current) {
+        parallaxRef.current.style.transform = `translateY(${window.scrollY * 0.35}px)`
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      
-      <div className="absolute inset-0 bg-[#0D0D0D]">
-        <div className="absolute top-0 right-0 w-px h-full bg-gradient-to-b from-transparent via-[#C9A84C]/20 to-transparent"></div>
-        <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A84C]/10 to-transparent"></div>
-
-        <div className="absolute bottom-0 left-0 font-display text-[20vw] font-bold text-[#1A1A1A] leading-none select-none pointer-events-none">
-          LAND
-        </div>
-
-        <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full border border-[#C9A84C]/10"></div>
-        <div className="absolute top-1/3 right-1/4 w-48 h-48 rounded-full border border-[#C9A84C]/5 translate-x-8 translate-y-8"></div>
+    <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      {/* Parallax background */}
+      <div ref={parallaxRef} style={{ position: 'absolute', inset: '-10%', zIndex: 0 }}>
+        <img
+          src="https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg"
+          alt="Premium property"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(28,25,23,0.88) 0%, rgba(28,25,23,0.6) 50%, rgba(28,25,23,0.75) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(28,25,23,1) 0%, transparent 40%)' }} />
       </div>
 
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20">
-        <div className="max-w-3xl">
-          
-          <div className="flex items-center gap-4 mb-8 fade-up fade-up-delay-1">
-            <div className="gold-line"></div>
-            <span className="text-xs tracking-[0.3em] uppercase text-[#C9A84C]">
-              Premium Real Estate
-            </span>
+      {/* Decorative rings */}
+      <div className="hero-bg-fade" style={{ position: 'absolute', top: '20%', right: '8%', width: 180, height: 180, border: '1px solid rgba(234,88,12,0.15)', borderRadius: '50%', zIndex: 1 }} />
+      <div className="hero-bg-fade" style={{ position: 'absolute', top: '22%', right: '9.5%', width: 130, height: 130, border: '1px solid rgba(234,88,12,0.08)', borderRadius: '50%', zIndex: 1 }} />
+      <div style={{ position: 'absolute', top: 0, left: '38%', width: 1, height: '100%', background: 'linear-gradient(to bottom, transparent, rgba(234,88,12,0.12), transparent)', zIndex: 1 }} />
+
+      {/* Content */}
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '140px 28px 80px', width: '100%' }}>
+        <div style={{ maxWidth: 720 }}>
+          <div className="hero-1" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
+            <div style={{ width: 40, height: 1, background: 'var(--terracotta)' }} />
+            <span className="eyebrow">Premium Real Estate · Nigeria</span>
           </div>
 
-          
-          <h1 className="font-display text-6xl md:text-8xl font-light leading-none mb-8 fade-up fade-up-delay-2">
+          <h1 className="font-display hero-2" style={{ fontSize: 'clamp(3rem, 7.5vw, 6.5rem)', fontWeight: 300, lineHeight: 1.02, marginBottom: 28, color: 'var(--cream)' }}>
             Where Land
             <br />
-            <em className="text-[#C9A84C] not-italic">Becomes</em>
+            <em style={{ color: 'var(--terracotta)', fontStyle: 'italic' }}>Becomes</em>
             <br />
-            Legacy
+            Legacy.
           </h1>
 
-          
-          <p className="text-[#888880] text-lg font-light max-w-lg leading-relaxed mb-12 fade-up fade-up-delay-3">
-            Premium land acquisitions across Nigeria most strategic locations.
-            We connect discerning buyers to land that appreciates, protects, and endures.
+          <p className="hero-3" style={{ fontSize: 16, color: 'var(--stone-light)', lineHeight: 1.8, maxWidth: 480, marginBottom: 44, borderLeft: '2px solid var(--terracotta)', paddingLeft: 20 }}>
+            Premium land acquisitions across Nigeria&apos;s fastest-growing corridors —
+            verified, secured, and delivered with total confidence.
           </p>
 
-         
-          <div className="flex flex-col sm:flex-row gap-4 fade-up fade-up-delay-4">
-            <Link
-              href="#properties"
-              className="text-xs tracking-widest uppercase bg-[#C9A84C] text-[#0D0D0D] px-8 py-4 hover:bg-[#E8D5A3] transition-all duration-300 text-center font-medium"
-            >
+          <div className="hero-4" style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginBottom: 70 }}>
+            <Link href="#properties" className="filled-btn">
               View Properties
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
-
-            <Link
-              href="#contact"
-              className="text-xs tracking-widest uppercase border border-[#333] text-[#F5F0E8] px-8 py-4 hover:border-[#C9A84C] transition-all duration-300 text-center"
-            >
-              Book Consultation
-            </Link>
+            <Link href="#contact" className="outline-btn">Book Consultation</Link>
           </div>
 
-          
-          <div className="flex gap-12 mt-20 fade-up fade-up-delay-5">
+          <div className="hero-5" style={{ display: 'flex', gap: 'clamp(24px, 5vw, 60px)', flexWrap: 'wrap' }}>
             {[
-              { number: '1,300+', label: 'Hectares Available' },
-              { number: '₦215M', label: 'Portfolio Value' },
-              { number: '500+', label: 'Happy Clients' },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="font-display text-3xl text-[#C9A84C] font-light">
-                  {stat.number}
-                </div>
-                <div className="text-xs tracking-widest uppercase text-[#888880] mt-1">
-                  {stat.label}
-                </div>
+              { num: '1,300+', label: 'Hectares Available' },
+              { num: '₦215M', label: 'Portfolio Value' },
+              { num: '500+', label: 'Happy Clients' },
+            ].map((s, i) => (
+              <div key={i}>
+                <div className="font-display" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 300, color: 'var(--terracotta)', lineHeight: 1 }}>{s.num}</div>
+                <div style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--stone)', marginTop: 6 }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 fade-up fade-up-delay-5">
-        <span className="text-xs tracking-widest uppercase text-[#888880]">
-          Scroll
-        </span>
-        <div className="w-px h-12 bg-gradient-to-b from-[#C9A84C] to-transparent"></div>
+      {/* Scroll indicator */}
+      <div className="hero-6" style={{ position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--stone)' }}>Scroll</span>
+        <div className="scroll-pulse" style={{ width: 1, height: 50, background: 'linear-gradient(to bottom, var(--terracotta), transparent)' }} />
       </div>
     </section>
   )
